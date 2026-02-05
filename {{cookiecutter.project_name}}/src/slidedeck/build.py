@@ -179,7 +179,7 @@ def build_styles_css() -> str:
     margin: 0 auto;
 }
 
-.reveal figcaption {
+.reveal .slides .slide img+p.caption {
     font-size: 0.5em;
     color: #666;
     text-align: center;
