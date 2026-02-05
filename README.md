@@ -146,8 +146,9 @@ quarto preview recent.qmd
 Each slide shows:
 1. **Title** at the top
 2. **Figure** centered
-3. **Caption** below the figure (italic, smaller text)
-4. **Speaker notes** visible only in presenter view (press `S`)
+3. **Caption** below the figure (small italic text)
+4. **Date** in bottom-left corner (small italic, like slide numbers)
+5. **Speaker notes** visible only in presenter view (press `S`)
 
 Example generated slide:
 
@@ -158,6 +159,10 @@ Example generated slide:
 
 ::: {.notes}
 Model selected based on AIC comparison
+:::
+
+::: {.slide-date}
+2024-01-15
 :::
 ```
 

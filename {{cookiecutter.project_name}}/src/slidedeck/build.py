@@ -76,7 +76,6 @@ def build_slides_qmd(registry: dict) -> str:
             # Figure with optional caption
             caption = slide.get("caption", "") or slide.get("description", "")
             if caption:
-                # Use Quarto figure syntax with caption
                 lines.extend([
                     "![" + caption + "](" + slide["figure"] + ")",
                     "",
@@ -97,7 +96,13 @@ def build_slides_qmd(registry: dict) -> str:
                     "",
                 ])
 
-            lines.append("")
+            # Add date footer
+            lines.extend([
+                "::: " + "{" + ".slide-date}",
+                slide["created"],
+                ":::",
+                "",
+            ])
 
     return "\n".join(lines)
 
@@ -140,7 +145,6 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
 
         lines.extend([
             "## " + slide["title"],
-            "*" + topic_name + " \u00b7 " + slide["created"] + "*",
             "",
         ])
 
@@ -167,7 +171,13 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
                 "",
             ])
 
-        lines.append("")
+        # Add date footer with topic
+        lines.extend([
+            "::: " + "{" + ".slide-date}",
+            slide["created"] + " \u00b7 " + topic_name,
+            ":::",
+            "",
+        ])
 
     return "\n".join(lines)
 
@@ -179,18 +189,22 @@ def build_styles_css() -> str:
 }
 
 .reveal figure img {
-    max-height: 65vh;
+    max-height: 60vh;
     width: auto;
     display: block;
     margin: 0 auto;
 }
 
 .reveal figcaption {
-    font-size: 0.7em;
-    color: #555;
+    font-size: 0.5em;
+    color: #666;
     text-align: center;
     margin-top: 0.5em;
     font-style: italic;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.3;
 }
 
 .reveal h2 {
@@ -198,10 +212,13 @@ def build_styles_css() -> str:
     margin-bottom: 0.3em;
 }
 
-.reveal section > p:first-of-type {
-    font-size: 0.8em;
+.reveal .slide-date {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    font-size: 0.5em;
+    font-style: italic;
     color: #666;
-    margin-bottom: 0.5em;
 }
 """
 
