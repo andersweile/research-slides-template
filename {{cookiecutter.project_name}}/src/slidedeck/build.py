@@ -22,6 +22,11 @@ def build_slides_qmd(registry: dict) -> str:
         "    theme: default",
         "    slide-number: true",
         "    fig-cap-location: bottom",
+        "    navigation-mode: vertical",
+        "    controls: true",
+        "    menu:",
+        "      side: left",
+        "      width: thin",
         "css: styles.css",
         "---",
         "",
@@ -67,9 +72,10 @@ def build_slides_qmd(registry: dict) -> str:
         ])
 
         for slide in topic_slides:
-            # Slide with title
+            # Slide with title and date attribute
+            date_str = slide["created"]
             lines.extend([
-                "## " + slide["title"] + " " + "{" + "#" + slide["id"] + "}",
+                "## " + slide["title"] + " " + "{" + "#" + slide["id"] + " data-date=\"" + date_str + "\"}",
                 "",
             ])
 
@@ -96,14 +102,6 @@ def build_slides_qmd(registry: dict) -> str:
                     "",
                 ])
 
-            # Add date footer
-            lines.extend([
-                "::: " + "{" + ".slide-date}",
-                slide["created"],
-                ":::",
-                "",
-            ])
-
     return "\n".join(lines)
 
 
@@ -117,6 +115,11 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
         "    theme: default",
         "    slide-number: true",
         "    fig-cap-location: bottom",
+        "    navigation-mode: vertical",
+        "    controls: true",
+        "    menu:",
+        "      side: left",
+        "      width: thin",
         "css: styles.css",
         "---",
         "",
@@ -142,9 +145,10 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
 
     for slide in recent_slides:
         topic_name = topics.get(slide["topic"], slide["topic"].replace("_", " ").title())
+        date_str = slide["created"]
 
         lines.extend([
-            "## " + slide["title"],
+            "## " + slide["title"] + " " + "{" + "data-date=\"" + date_str + " \u00b7 " + topic_name + "\"}",
             "",
         ])
 
@@ -171,14 +175,6 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
                 "",
             ])
 
-        # Add date footer with topic
-        lines.extend([
-            "::: " + "{" + ".slide-date}",
-            slide["created"] + " \u00b7 " + topic_name,
-            ":::",
-            "",
-        ])
-
     return "\n".join(lines)
 
 
@@ -189,7 +185,7 @@ def build_styles_css() -> str:
 }
 
 .reveal figure img {
-    max-height: 60vh;
+    max-height: 55vh;
     width: auto;
     display: block;
     margin: 0 auto;
@@ -199,7 +195,7 @@ def build_styles_css() -> str:
     font-size: 0.5em;
     color: #666;
     text-align: center;
-    margin-top: 0.5em;
+    margin-top: 0.3em;
     font-style: italic;
     max-width: 80%;
     margin-left: auto;
@@ -208,17 +204,26 @@ def build_styles_css() -> str:
 }
 
 .reveal h2 {
-    font-size: 1.4em;
-    margin-bottom: 0.3em;
+    font-size: 1.3em;
+    margin-bottom: 0.2em;
 }
 
-.reveal .slide-date {
+/* Date display in bottom-left corner */
+.reveal section[data-date]::after {
+    content: attr(data-date);
     position: absolute;
-    bottom: 16px;
-    left: 16px;
-    font-size: 0.5em;
+    bottom: 0;
+    left: 0;
+    font-size: 0.4em;
     font-style: italic;
-    color: #666;
+    color: #888;
+    padding: 8px 16px;
+}
+
+/* TOC sidebar styling */
+.reveal .slide-menu-button {
+    left: 8px;
+    bottom: 8px;
 }
 """
 
