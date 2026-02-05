@@ -181,11 +181,10 @@ def build_styles_css() -> str:
 
 .reveal .slides .slide img+p.caption {
     font-size: 0.5em;
-    color: #666;
-    text-align: center;
+    color: #333;
+    text-align: left;
     margin-top: 0.5em;
-    font-style: italic;
-    max-width: 80%;
+    max-width: 90%;
     margin-left: auto;
     margin-right: auto;
     line-height: 1.3;
