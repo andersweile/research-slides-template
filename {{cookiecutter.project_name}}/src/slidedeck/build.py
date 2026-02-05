@@ -168,7 +168,11 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
 
 def build_styles_css() -> str:
     """Generate CSS for figure styling."""
-    return """.reveal figure {
+    return """.reveal {
+    font-family: Arial, sans-serif;
+}
+
+.reveal figure {
     margin: 0 auto;
 }
 
