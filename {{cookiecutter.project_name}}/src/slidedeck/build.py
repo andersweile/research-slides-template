@@ -96,14 +96,6 @@ def build_slides_qmd(registry: dict) -> str:
                     "",
                 ])
 
-            # Add date footer
-            lines.extend([
-                "::: " + "{" + ".slide-date}",
-                slide["created"],
-                ":::",
-                "",
-            ])
-
     return "\n".join(lines)
 
 
@@ -171,14 +163,6 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
                 "",
             ])
 
-        # Add date footer with topic
-        lines.extend([
-            "::: " + "{" + ".slide-date}",
-            slide["created"] + " \u00b7 " + topic_name,
-            ":::",
-            "",
-        ])
-
     return "\n".join(lines)
 
 
@@ -210,15 +194,6 @@ def build_styles_css() -> str:
 .reveal h2 {
     font-size: 1.4em;
     margin-bottom: 0.3em;
-}
-
-.reveal .slide-date {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    font-size: 0.5em;
-    font-style: italic;
-    color: #666;
 }
 """
 
