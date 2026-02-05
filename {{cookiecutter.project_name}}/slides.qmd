@@ -1,0 +1,28 @@
+---
+title: "Research Figures"
+format: revealjs
+---
+
+# Welcome
+
+This slide deck is auto-generated from `slides.yaml`.
+
+Run `slidedeck build` to regenerate after adding figures.
+
+---
+
+# Getting Started
+
+Add your first figure:
+
+```bash
+slidedeck add figures/data_exploration/my_plot.png \
+  --topic data_exploration \
+  --title "My First Plot"
+```
+
+Then rebuild:
+
+```bash
+slidedeck build
+```

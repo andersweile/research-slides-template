@@ -1,0 +1,53 @@
+---
+title: "Research Figures"
+format: html
+---
+
+# Research Slide Deck
+
+A rolling collection of research figures organized by topic.
+
+## Navigation
+
+- **[Slides](slides.qmd)**: Full presentation view of all figures
+- **[Recent](recent.qmd)**: Most recently added figures across all topics
+
+## Topics
+
+### Data Exploration
+
+Exploratory data analysis, distributions, correlations, and data quality checks.
+
+### Modeling
+
+Model development, diagnostics, and intermediate results.
+
+### Results
+
+Final results, key findings, and publication-ready figures.
+
+---
+
+## CLI Commands
+
+```bash
+# Install the CLI (run once)
+pip install -e .
+
+# Add a figure with caption
+slidedeck add figures/data_exploration/plot.png \
+  --title "Age Distribution" \
+  --caption "Distribution of participant ages (N=1,234)"
+
+# Add with speaker notes
+slidedeck add figures/modeling/coefficients.png \
+  --title "Model Coefficients" \
+  --caption "Standardized regression coefficients with 95% CI" \
+  --notes "Note the large effect of education variable"
+
+# Build/regenerate all QMD files
+slidedeck build
+
+# Preview the slides
+slidedeck preview
+```

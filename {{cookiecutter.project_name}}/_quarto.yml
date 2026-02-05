@@ -1,0 +1,29 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Research Figures"
+  navbar:
+    left:
+      - text: "Slides"
+        href: slides.qmd
+      - text: "Recent"
+        href: recent.qmd
+      - text: "Browse"
+        href: index.qmd
+
+format:
+  revealjs:
+    theme: simple
+    navigation-mode: linear
+    controls: true
+    slide-number: true
+    toc: true
+    toc-depth: 2
+    menu:
+      side: left
+      width: wide
+  html:
+    toc: true
+    toc-depth: 2

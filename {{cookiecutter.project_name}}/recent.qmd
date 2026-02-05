@@ -1,0 +1,10 @@
+---
+title: "Recent Figures"
+format: revealjs
+---
+
+# Recent Figures
+
+No figures added yet.
+
+Run `slidedeck add` to add your first figure, then `slidedeck build` to regenerate this view.
