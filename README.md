@@ -52,21 +52,27 @@ research_slides/
 
 ### Figure slides
 
-Have a `figure` field pointing to an image. Optionally include a `caption`.
+Have a `figure` field pointing to an image. Optionally include a `caption`. Captions support full markdown: line breaks (`\`), **bold**, *italics*, lists, etc.
 
 ```yaml
 - id: 2026-02-05_my_plot
   topic: results
   title: My Plot
   figure: figures/results/my_plot.png
-  caption: "Description of the figure."
+  caption: |
+    **Panel A**: Distribution of scores.\
+    **Panel B**: Correlation matrix.
+
+    Data sourced from Experiment 2.
   created: '2026-02-05'
   tags: []
 ```
 
 ### Text-only slides
 
-Have a `content` field with raw markdown instead of a figure. These are automatically scrollable when content overflows.
+Have a `content` field with raw markdown instead of a figure. All slides are scrollable when content overflows.
+
+**Important**: Do NOT use `#` headings in `content` — RevealJS interprets them as slide breaks. Use `**bold**` or `*italic*` text instead for section headers within a slide.
 
 ```yaml
 - id: next_steps

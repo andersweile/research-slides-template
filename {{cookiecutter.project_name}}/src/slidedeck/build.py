@@ -18,14 +18,15 @@ def _render_slide(slide: dict, lines: list[str]) -> None:
     figure = slide.get("figure", "")
     if figure:
         caption = slide.get("caption", "") or slide.get("description", "")
+        lines.extend([
+            "![](" + figure + ")",
+            "",
+        ])
         if caption:
             lines.extend([
-                "![" + caption + "](" + figure + ")",
-                "",
-            ])
-        else:
-            lines.extend([
-                "![](" + figure + ")",
+                "::: " + "{" + ".caption}",
+                caption.rstrip(),
+                ":::",
                 "",
             ])
 
@@ -59,6 +60,8 @@ def build_slides_qmd(registry: dict) -> str:
         "    theme: default",
         "    slide-number: true",
         "    fig-cap-location: bottom",
+        "    margin: 0.05",
+        "    scrollable: true",
         "css: styles.css",
         "---",
         "",
@@ -104,12 +107,8 @@ def build_slides_qmd(registry: dict) -> str:
         ])
 
         for slide in topic_slides:
-            # Add .scrollable class to text-only slides
-            has_content = slide.get("content", "")
-            has_figure = slide.get("figure", "")
-            classes = " .scrollable" if has_content and not has_figure else ""
             lines.extend([
-                "## " + slide["title"] + " " + "{" + "#" + slide["id"] + classes + "}",
+                "## " + slide["title"] + " " + "{" + "#" + slide["id"] + "}",
                 "",
             ])
             _render_slide(slide, lines)
@@ -151,11 +150,8 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
     topics = {t["id"]: t["name"] for t in registry["topics"]}
 
     for slide in recent_slides:
-        has_content = slide.get("content", "")
-        has_figure = slide.get("figure", "")
-        classes = " {.scrollable}" if has_content and not has_figure else ""
         lines.extend([
-            "## " + slide["title"] + classes,
+            "## " + slide["title"],
             "",
         ])
         _render_slide(slide, lines)
@@ -175,31 +171,49 @@ def build_styles_css() -> str:
     font-family: Arial, sans-serif !important;
 }
 
-.reveal figure {
-    margin: 0 auto;
+/* Smaller headlines */
+.reveal h1 {
+    font-size: 1.4em;
+    margin-bottom: 0.3em;
 }
 
-.reveal figure img {
-    max-height: 60vh;
+.reveal h2 {
+    font-size: 1.1em;
+    margin-bottom: 0.2em;
+}
+
+/* Center all images */
+.reveal img {
+    max-height: 65vh;
     width: auto;
     display: block;
     margin: 0 auto;
 }
 
-.reveal .slides .slide img+p.caption {
+.reveal figure {
+    margin: 0 auto;
+}
+
+/* Figure captions */
+.reveal .caption {
     font-size: 0.3em;
     color: #333;
     text-align: left;
     margin-top: 0.5em;
-    max-width: 90%;
+    max-width: 95%;
     margin-left: auto;
     margin-right: auto;
     line-height: 1.3;
 }
 
-.reveal h2 {
-    font-size: 1.4em;
-    margin-bottom: 0.3em;
+/* Scrollable table of contents */
+.reveal .slide-menu-wrapper {
+    overflow-y: auto;
+}
+
+#TOC {
+    max-height: 80vh;
+    overflow-y: auto;
 }
 """
 
