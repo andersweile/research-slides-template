@@ -171,6 +171,13 @@ def build_styles_css() -> str:
     font-family: Arial, sans-serif !important;
 }
 
+/* Vertically center slide content when space allows */
+.reveal .slides section {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
 /* Smaller headlines */
 .reveal h1 {
     font-size: 1.4em;
