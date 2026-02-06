@@ -13,14 +13,7 @@ def load_registry(path: Path = Path("slides.yaml")) -> dict:
 
 
 def _render_slide(slide: dict, lines: list[str]) -> None:
-    """Render a single slide's content (figure and/or markdown) into lines.
-
-    Wraps visible content in a ::: {.slide-content} div so CSS can
-    center it vertically below the heading.
-    """
-    lines.append("::: " + "{" + ".slide-content}")
-    lines.append("")
-
+    """Render a single slide's content (figure and/or markdown) into lines."""
     # Figure with optional caption
     figure = slide.get("figure", "")
     if figure:
@@ -45,10 +38,7 @@ def _render_slide(slide: dict, lines: list[str]) -> None:
             "",
         ])
 
-    lines.append(":::")
-    lines.append("")
-
-    # Speaker notes (outside the wrapper, RevealJS handles these separately)
+    # Speaker notes
     notes = slide.get("notes", "")
     if notes:
         lines.extend([
@@ -181,30 +171,14 @@ def build_styles_css() -> str:
     font-family: Arial, sans-serif !important;
 }
 
-/* Slide layout: heading at top, content centered in remaining space */
-.reveal .slides section {
-    display: flex !important;
-    flex-direction: column;
-    height: 100%;
-}
-
 .reveal h1 {
     font-size: 1.4em;
-    flex-shrink: 0;
+    margin-bottom: 0.3em;
 }
 
 .reveal h2 {
     font-size: 1.1em;
-    flex-shrink: 0;
-}
-
-/* Content wrapper fills remaining space and centers its children */
-.slide-content {
-    flex: 1;
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 0;
+    margin-bottom: 0.2em;
 }
 
 /* Center all images */
