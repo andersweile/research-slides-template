@@ -205,13 +205,19 @@ def build_styles_css() -> str:
     line-height: 1.3;
 }
 
-/* Scrollable table of contents */
-.reveal .slide-menu-wrapper {
+/* Title slide */
+.reveal .slides > section:first-child h1 {
+    font-size: 2em;
+}
+
+/* Table of contents */
+#TOC {
+    font-size: 1.4em;
+    max-height: 80vh;
     overflow-y: auto;
 }
 
-#TOC {
-    max-height: 80vh;
+.reveal .slide-menu-wrapper {
     overflow-y: auto;
 }
 """
