@@ -212,7 +212,6 @@ def build_styles_css() -> str:
 
 /* Table of contents */
 #TOC {
-    font-size: 1.4em;
     max-height: 80vh;
     overflow-y: auto;
 }
