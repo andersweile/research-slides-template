@@ -1,0 +1,81 @@
+.reveal,
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal p,
+.reveal li,
+.reveal .slides {
+    font-family: Arial, sans-serif !important;
+}
+
+.reveal h1 {
+    font-size: 1.4em;
+    margin-bottom: 0.3em;
+}
+
+.reveal h2 {
+    font-size: 1.1em;
+    margin-bottom: 0.2em;
+}
+
+/* Center all images */
+.reveal img {
+    max-height: 65vh;
+    width: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.reveal figure {
+    margin: 0 auto;
+}
+
+/* Figure captions */
+.reveal .caption {
+    font-size: 0.3em;
+    color: #333;
+    text-align: left;
+    margin-top: 0.5em;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.3;
+}
+
+/* Text-heavy slides */
+.reveal .text-slide p,
+.reveal .text-slide li {
+    font-size: 0.65em;
+    line-height: 1.4;
+}
+
+.reveal .text-slide ol {
+    margin-left: 1.2em;
+}
+
+.reveal .text-slide ul {
+    margin-left: 0.5em;
+}
+
+.reveal .text-slide ol > li {
+    margin-bottom: 0.6em;
+}
+
+.reveal .text-slide ul > li {
+    margin-bottom: 0.2em;
+}
+
+/* Title slide */
+.reveal .slides > section:first-child h1 {
+    font-size: 2em;
+}
+
+/* Table of contents */
+#TOC {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.reveal .slide-menu-wrapper {
+    overflow-y: auto;
+}

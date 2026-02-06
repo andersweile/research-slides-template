@@ -15,12 +15,16 @@ website:
 
 format:
   revealjs:
-    theme: simple
+    theme: default
     navigation-mode: linear
     controls: true
     slide-number: true
     toc: true
     toc-depth: 2
+    fig-cap-location: bottom
+    margin: 0.05
+    scrollable: true
+    css: styles.css
     menu:
       side: left
       width: wide
