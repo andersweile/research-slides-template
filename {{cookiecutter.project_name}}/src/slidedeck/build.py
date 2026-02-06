@@ -171,22 +171,22 @@ def build_styles_css() -> str:
     font-family: Arial, sans-serif !important;
 }
 
-/* Vertically center slide content when space allows */
+/* Vertically center slide content, but keep headings at top */
 .reveal .slides section {
     display: flex !important;
     flex-direction: column;
     justify-content: center;
 }
 
-/* Smaller headlines */
+/* Smaller headlines, pinned to top */
 .reveal h1 {
     font-size: 1.4em;
-    margin-bottom: 0.3em;
+    margin-bottom: auto;
 }
 
 .reveal h2 {
     font-size: 1.1em;
-    margin-bottom: 0.2em;
+    margin-bottom: auto;
 }
 
 /* Center all images */
