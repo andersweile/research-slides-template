@@ -12,11 +12,48 @@ def load_registry(path: Path = Path("slides.yaml")) -> dict:
         return yaml.safe_load(f)
 
 
+def _render_slide(slide: dict, lines: list[str]) -> None:
+    """Render a single slide's content (figure and/or markdown) into lines."""
+    # Figure with optional caption
+    figure = slide.get("figure", "")
+    if figure:
+        caption = slide.get("caption", "") or slide.get("description", "")
+        if caption:
+            lines.extend([
+                "![" + caption + "](" + figure + ")",
+                "",
+            ])
+        else:
+            lines.extend([
+                "![](" + figure + ")",
+                "",
+            ])
+
+    # Markdown content (for text-only or mixed slides)
+    content = slide.get("content", "")
+    if content:
+        lines.extend([
+            content.rstrip(),
+            "",
+        ])
+
+    # Speaker notes
+    notes = slide.get("notes", "")
+    if notes:
+        lines.extend([
+            "::: " + "{" + ".notes}",
+            notes,
+            ":::",
+            "",
+        ])
+
+
 def build_slides_qmd(registry: dict) -> str:
     """Generate the main slides.qmd content."""
+    title = registry.get("title", "Research Figures")
     lines = [
         "---",
-        'title: "Research Figures"',
+        'title: "' + title + '"',
         "format:",
         "  revealjs:",
         "    theme: default",
@@ -67,34 +104,15 @@ def build_slides_qmd(registry: dict) -> str:
         ])
 
         for slide in topic_slides:
-            # Slide with title
+            # Add .scrollable class to text-only slides
+            has_content = slide.get("content", "")
+            has_figure = slide.get("figure", "")
+            classes = " .scrollable" if has_content and not has_figure else ""
             lines.extend([
-                "## " + slide["title"] + " " + "{" + "#" + slide["id"] + "}",
+                "## " + slide["title"] + " " + "{" + "#" + slide["id"] + classes + "}",
                 "",
             ])
-
-            # Figure with optional caption
-            caption = slide.get("caption", "") or slide.get("description", "")
-            if caption:
-                lines.extend([
-                    "![" + caption + "](" + slide["figure"] + ")",
-                    "",
-                ])
-            else:
-                lines.extend([
-                    "![](" + slide["figure"] + ")",
-                    "",
-                ])
-
-            # Add speaker notes if present
-            notes = slide.get("notes", "")
-            if notes:
-                lines.extend([
-                    "::: " + "{" + ".notes}",
-                    notes,
-                    ":::",
-                    "",
-                ])
+            _render_slide(slide, lines)
 
     return "\n".join(lines)
 
@@ -133,35 +151,14 @@ def build_recent_qmd(registry: dict, count: int = 10) -> str:
     topics = {t["id"]: t["name"] for t in registry["topics"]}
 
     for slide in recent_slides:
-        topic_name = topics.get(slide["topic"], slide["topic"].replace("_", " ").title())
-
+        has_content = slide.get("content", "")
+        has_figure = slide.get("figure", "")
+        classes = " {.scrollable}" if has_content and not has_figure else ""
         lines.extend([
-            "## " + slide["title"],
+            "## " + slide["title"] + classes,
             "",
         ])
-
-        # Figure with optional caption
-        caption = slide.get("caption", "") or slide.get("description", "")
-        if caption:
-            lines.extend([
-                "![" + caption + "](" + slide["figure"] + ")",
-                "",
-            ])
-        else:
-            lines.extend([
-                "![](" + slide["figure"] + ")",
-                "",
-            ])
-
-        # Add speaker notes if present
-        notes = slide.get("notes", "")
-        if notes:
-            lines.extend([
-                "::: " + "{" + ".notes}",
-                notes,
-                ":::",
-                "",
-            ])
+        _render_slide(slide, lines)
 
     return "\n".join(lines)
 
@@ -190,7 +187,7 @@ def build_styles_css() -> str:
 }
 
 .reveal .slides .slide img+p.caption {
-    font-size: 0.5em;
+    font-size: 0.3em;
     color: #333;
     text-align: left;
     margin-top: 0.5em;

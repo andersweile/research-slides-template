@@ -1,6 +1,6 @@
 # Research Slides Template
 
-A cookiecutter template for creating rolling research slide decks with Quarto Reveal.js. Track your research figures over time, organized by topic, with academic-style captions.
+A cookiecutter template for creating rolling research slide decks with Quarto RevealJS. Track your research figures over time, organized by topic, with academic-style captions.
 
 ## Quick Start
 
@@ -19,23 +19,27 @@ slidedeck add figures/data_exploration/my_plot.png \
   --title "My Analysis" \
   --caption "Distribution of values (N=100)"
 
-# Build the slides
+# Build and preview
 slidedeck build
-
-# Preview in browser
-quarto preview slides.qmd
+quarto preview
 ```
 
-## Project Structure
+## How It Works
+
+`slides.yaml` is the single source of truth. All slide content, topics, and the deck title are defined there. The `.qmd` files are generated — never edit them by hand.
+
+**Workflow: edit `slides.yaml` -> run `slidedeck build` -> preview with `quarto preview`.**
+
+### Project Structure
 
 ```
 research_slides/
-├── _quarto.yml          # Quarto project configuration
-├── slides.yaml          # Figure registry (metadata for all slides)
-├── slides.qmd           # Auto-generated main slide deck
-├── recent.qmd           # Auto-generated recent figures view
+├── slides.yaml          # Single source of truth (all slide metadata + content)
+├── slides.qmd           # Generated — main slide deck
+├── recent.qmd           # Generated — recent figures view
+├── styles.css           # Generated — slide styling
+├── _quarto.yml          # Quarto project config (navbar, theme)
 ├── index.qmd            # Landing page with navigation
-├── styles.css           # Auto-generated styling
 ├── figures/             # Figure images organized by topic
 │   ├── data_exploration/
 │   ├── modeling/
@@ -44,59 +48,100 @@ research_slides/
 └── src/slidedeck/       # CLI tool source
 ```
 
-## CLI Commands
+## Slide Types
 
-### Add a figure
+### Figure slides
 
-```bash
-slidedeck add <figure_path> [options]
+Have a `figure` field pointing to an image. Optionally include a `caption`.
+
+```yaml
+- id: 2026-02-05_my_plot
+  topic: results
+  title: My Plot
+  figure: figures/results/my_plot.png
+  caption: "Description of the figure."
+  created: '2026-02-05'
+  tags: []
 ```
 
-**Options:**
-| Option | Short | Description |
-|--------|-------|-------------|
-| `--title` | `-T` | Slide title (shown at top). Inferred from filename if omitted. |
-| `--caption` | `-c` | Figure caption (shown below figure, like in papers) |
-| `--notes` | `-n` | Speaker notes (only visible in presenter view) |
-| `--topic` | `-t` | Topic ID. Inferred from path if figure is in `figures/<topic>/` |
-| `--tags` | | Comma-separated tags for organization |
-| `--copy` | | Copy the figure file into the `figures/` directory |
+### Text-only slides
 
-**Examples:**
+Have a `content` field with raw markdown instead of a figure. These are automatically scrollable when content overflows.
+
+```yaml
+- id: next_steps
+  topic: results
+  title: Next Steps
+  content: |
+    **Analysis**
+
+    - Task one
+    - Task two
+
+    **Writing**
+
+    - Draft introduction
+  created: '2026-02-05'
+  tags: []
+```
+
+### Mixed slides
+
+Can have both `figure` and `content` — the figure renders first, then the markdown below it.
+
+## Slide Schema
+
+Each slide in `slides.yaml` supports these fields:
+
+| Field     | Required | Description                                    |
+|-----------|----------|------------------------------------------------|
+| `id`      | yes      | Unique identifier (used as HTML anchor)        |
+| `topic`   | yes      | Topic ID (must match a topic in `topics:`)     |
+| `title`   | yes      | Slide heading                                  |
+| `figure`  | no       | Path to figure image                           |
+| `caption` | no       | Caption text below the figure                  |
+| `content` | no       | Raw markdown content (for text-only slides)    |
+| `notes`   | no       | Speaker notes (only visible in presenter view) |
+| `created` | yes      | Date string (YYYY-MM-DD)                       |
+| `tags`    | no       | List of tags                                   |
+
+## CLI Commands
+
+### `slidedeck add`
+
+Add a figure slide to the registry:
 
 ```bash
-# Minimal - infers topic from path, title from filename
+# Minimal — infers topic from path, title from filename
 slidedeck add figures/data_exploration/correlation_matrix.png
 
-# With caption (appears below figure)
+# With caption
 slidedeck add figures/modeling/coefficients.png \
   --title "Regression Coefficients" \
-  --caption "Standardized coefficients with 95% CI from Model 2"
-
-# With speaker notes
-slidedeck add figures/results/main_finding.png \
-  --title "Key Result" \
-  --caption "Treatment effect sizes across conditions" \
-  --notes "Emphasize the significance of Treatment A"
+  --caption "Standardized coefficients with 95% CI"
 
 # Copy external figure into project
 slidedeck add ~/Downloads/plot.png --topic results --title "New Finding" --copy
 ```
 
-### Build slides
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--title` | `-T` | Slide title. Inferred from filename if omitted. |
+| `--caption` | `-c` | Figure caption (below figure) |
+| `--notes` | `-n` | Speaker notes (presenter view only) |
+| `--topic` | `-t` | Topic ID. Inferred from path if in `figures/<topic>/` |
+| `--tags` | | Comma-separated tags |
+| `--copy` | | Copy figure file into `figures/` directory |
 
-Regenerates `slides.qmd` and `recent.qmd` from the registry:
+### `slidedeck build`
+
+Regenerates `slides.qmd`, `recent.qmd`, and `styles.css` from `slides.yaml`:
 
 ```bash
 slidedeck build
 ```
 
-**Options:**
-| Option | Short | Description |
-|--------|-------|-------------|
-| `--recent-count` | `-n` | Number of figures in recent view (default: 10) |
-
-### Preview
+### `slidedeck preview`
 
 Build and open in browser:
 
@@ -104,108 +149,36 @@ Build and open in browser:
 slidedeck preview
 ```
 
-### Git history tools
+### `slidedeck history` / `slidedeck compare`
 
-View the git history of a figure:
-
-```bash
-slidedeck history figures/data_exploration/my_plot.png
-```
-
-Generate an HTML comparison of all versions:
+View git history of a figure, or generate an HTML comparison of all versions:
 
 ```bash
-slidedeck compare figures/data_exploration/my_plot.png --output comparison.html
+slidedeck history figures/results/my_plot.png
+slidedeck compare figures/results/my_plot.png -o comparison.html
 ```
 
-## Rendering Options
+## Editing Slides
 
-### Slide presentation (default)
-
-```bash
-quarto preview slides.qmd      # Live preview
-quarto render slides.qmd       # Build HTML
-```
-
-### PDF export
-
-```bash
-quarto render slides.qmd --to pdf
-```
-
-### Recent figures view
-
-Shows the N most recent figures across all topics:
-
-```bash
-quarto preview recent.qmd
-```
-
-## Slide Format
-
-Each slide shows:
-1. **Title** at the top
-2. **Figure** centered
-3. **Caption** below the figure (small italic text)
-4. **Speaker notes** visible only in presenter view (press `S`)
-
-Example generated slide:
-
-```markdown
-## Regression Coefficients
-
-![Standardized coefficients with 95% CI from Model 2](figures/modeling/coefficients.png)
-
-::: {.notes}
-Model selected based on AIC comparison
-:::
-```
-
-## Topics
-
-Default topics (defined in `slides.yaml`):
-- `data_exploration` - EDA, distributions, correlations
-- `modeling` - Model development, diagnostics
-- `results` - Final results, key findings
-
-Add custom topics by editing `slides.yaml`:
-
-```yaml
-topics:
-  - id: data_exploration
-    name: "Data Exploration"
-    order: 1
-  - id: methods
-    name: "Methods"
-    order: 2
-  - id: results
-    name: "Results"
-    order: 3
-```
+- **Titles, captions, content:** Edit the slide entry in `slides.yaml`, then `slidedeck build`.
+- **Replacing a figure:** Overwrite the image file in `figures/` with the same filename. No YAML change needed.
+- **Deck title:** Change the top-level `title:` field in `slides.yaml`.
+- **Topics:** Edit the `topics:` list in `slides.yaml`. Each topic has `id`, `name`, and `order`.
 
 ## Workflow Integration
-
-### From notebooks/scripts
 
 ```python
 import matplotlib.pyplot as plt
 
-# Create and save figure
+# Save figure to the project
 fig, ax = plt.subplots()
 ax.plot(x, y)
 plt.savefig("research_slides/figures/results/my_plot.png", dpi=150)
 
 # Then in terminal:
 # cd research_slides && slidedeck add figures/results/my_plot.png --caption "..."
+# slidedeck build
 ```
-
-### Typical workflow
-
-1. Generate figure in analysis notebook
-2. Save to appropriate `figures/<topic>/` directory
-3. Run `slidedeck add` with title and caption
-4. Run `slidedeck build` to regenerate slides
-5. Preview with `quarto preview slides.qmd`
 
 ## Requirements
 
